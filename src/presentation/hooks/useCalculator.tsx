@@ -5,6 +5,34 @@ export const useCalculator = () => {
 
     const [number, setNumber] = useState('0')
 
+    const clean =  () => {
+        return setNumber('0');
+    }
+
+    //borrar el último numero ingresado
+    const deleteOperation = () => {
+        let currentSign = '';
+        let temporalNumber = number;
+
+        if(number.includes('-')) {
+            currentSign = '-';
+            temporalNumber = number.substring(1);
+        }
+
+        if (temporalNumber.length > 1) {
+            return setNumber(currentSign + temporalNumber.slice(0, -1));
+        }
+
+        return setNumber('0');
+    }
+
+    const toggleSign = () => {
+        if(number.includes('-')){
+            return setNumber(number.replace('-', ''));
+        }
+        return setNumber('-' + number);
+    }
+
     const buildNumber = ( numberString: string ) => {
 
         if(number.includes('.') && numberString === '.' ) return;
@@ -41,5 +69,9 @@ export const useCalculator = () => {
 
         //methods
         buildNumber,
+        toggleSign,
+        clean,
+        deleteOperation,
+
     }
 }
