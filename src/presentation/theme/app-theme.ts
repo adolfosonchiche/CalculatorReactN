@@ -45,7 +45,7 @@ export const styles = StyleSheet.create({
     row: {
         flexDirection: 'row',
         justifyContent: 'center',
-        marginBottom: 18,
+        marginBottom: 12,
         paddingHorizontal: 10,
     },
 
@@ -55,7 +55,7 @@ export const styles = StyleSheet.create({
         backgroundColor: colors.darkGray,
         borderRadius: 100,
         justifyContent: 'center',
-        marginHorizontal: 10,
+        marginHorizontal: 2,
 
     },
 
