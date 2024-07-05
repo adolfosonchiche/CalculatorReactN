@@ -16,7 +16,7 @@ export const useCalculator = () => {
     const lastOperation = useRef<Operator>();
 
 
-    const clean =  () => {
+    const clean = () => {
         return setNumber('0');
     }
 
@@ -25,7 +25,7 @@ export const useCalculator = () => {
         let currentSign = '';
         let temporalNumber = number;
 
-        if(number.includes('-')) {
+        if (number.includes('-')) {
             currentSign = '-';
             temporalNumber = number.substring(1);
         }
@@ -38,17 +38,17 @@ export const useCalculator = () => {
     }
 
     const toggleSign = () => {
-        if(number.includes('-')){
+        if (number.includes('-')) {
             return setNumber(number.replace('-', ''));
         }
         return setNumber('-' + number);
     }
 
-    const buildNumber = ( numberString: string ) => {
+    const buildNumber = (numberString: string) => {
 
-        if(number.includes('.') && numberString === '.' ) return;
-        
-        if (number.startsWith('0' || number.startsWith('-0'))){
+        if (number.includes('.') && numberString === '.') return;
+
+        if (number.startsWith('0' || number.startsWith('-0'))) {
 
             //punto decimal
             if (numberString === '.') {
@@ -56,17 +56,17 @@ export const useCalculator = () => {
             }
 
             //evaluar si es otro cero y no hay punto
-            if(numberString === '0' && number.includes('.')) {
+            if (numberString === '0' && number.includes('.')) {
                 return setNumber(number + numberString);
             }
 
             //evaluar si es diferente de cero, no hay punto decimal y es el primer numero
-            if (numberString !== '0' && !number.includes('.')){
-                return setNumber( numberString );
+            if (numberString !== '0' && !number.includes('.')) {
+                return setNumber(numberString);
             }
 
             //evaluar varios ceros al inicio 000000
-            if(numberString === '0' && !number.includes('.')){
+            if (numberString === '0' && !number.includes('.')) {
                 return;
             }
         }
@@ -74,10 +74,10 @@ export const useCalculator = () => {
     }
 
     const setLastNumber = () => {
-        if(number.endsWith('.')) {
-            setPrevNumber( number.slice(0, -1));
+        if (number.endsWith('.')) {
+            setPrevNumber(number.slice(0, -1));
         } else {
-            setPrevNumber( number );
+            setPrevNumber(number);
         }
 
         setNumber('0');
@@ -103,13 +103,37 @@ export const useCalculator = () => {
         lastOperation.current = Operator.add;
     }
 
+    const calculateResult = () => {
+        const num1 = Number(number);
+        const num2 = Number(prevNumber);
+
+        switch (lastOperation.current) {
+            case Operator.add:
+                setNumber(`${num1 + num2}`);
+                break;
+            case Operator.subtract:
+                setNumber(`${num2 - num1}`);
+                break;
+            case Operator.multiply:
+                setNumber(`${num1 * num2}`);
+                break;
+            case Operator.divide:
+                setNumber(`${num2 / num1}`);
+                break;
+
+            default:
+                throw new Error('Operation not implemented');
+            //break;
+        }
+        setPrevNumber( '0' );
+    }
 
 
     return {
         //properties
         number,
         prevNumber,
-        
+
         //methods
         buildNumber,
         toggleSign,
@@ -119,6 +143,7 @@ export const useCalculator = () => {
         multiplyOperation,
         subtractOperation,
         addOperation,
+        calculateResult,
 
     }
 }
