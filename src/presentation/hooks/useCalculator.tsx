@@ -18,16 +18,24 @@ export const useCalculator = () => {
 
 
     useEffect(() => {
-
         if (lastOperation.current) {
             const firstFormulaPart = formula.split(' ').at(0);
-            setFormula(`${firstFormulaPart} ${lastOperation.current} ${number}`)
+           // setFormula(`${firstFormulaPart} ${lastOperation.current} ${number}`);
+            setFormula( `${ firstFormulaPart } ${ lastOperation.current } ${ number }` );
         } else {
             setFormula(number);
         }
 
     }, [number]); //cada vez que el number cambie se ejecuta este useEffect
 
+
+    //mostrar el resultado sin presionar el igual
+    useEffect(() => {
+      const subResult = calculateSubResult();
+      setPrevNumber(`${ subResult }`)   
+      
+    }, [formula])
+    
 
 
     const clean = () => {
@@ -91,6 +99,9 @@ export const useCalculator = () => {
     }
 
     const setLastNumber = () => {
+        calculateResult();
+        
+
         if (number.endsWith('.')) {
             setPrevNumber(number.slice(0, -1));
         } else {
@@ -134,9 +145,12 @@ export const useCalculator = () => {
         //const num2 = Number(prevNumber);
         const  [firstValue, operation, secundValue ] = formula.split(' ');
         const num1 = Number(firstValue);
-        const num2 = Number(secundValue);
+        const num2 = Number(secundValue); //NaN
+        console.log('hola mundo')
+        if ( isNaN( num2 ) ) return num1;
 
-        switch (lastOperation.current) {
+        switch (operation) {
+
             case Operator.add:
                 return num1 + num2;
                 //break;
@@ -151,8 +165,9 @@ export const useCalculator = () => {
                 //break;
 
             default:
-                throw new Error('Operation not implemented');
-            //break;
+                console.log('not operation')
+                //throw new Error('Operation not implemented');
+            break; 
         }
     }
 
